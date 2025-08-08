@@ -1,0 +1,12 @@
+[
+    {
+        "title": "CK Demo",
+        "url": "ckdemo",
+        "icon": "bi bi-dot"
+    },
+    {
+        "title": "Pulse",
+        "url": "pulse",
+        "icon": "bi bi-dot"
+    }
+]
