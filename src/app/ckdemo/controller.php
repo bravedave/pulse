@@ -3,7 +3,7 @@
  * David Bray
  * BrayWorth Pty Ltd
  * e. david@brayworth.com.au
- * 
+ *
  * MIT License
  *
 */
@@ -11,7 +11,7 @@
 namespace ckdemo;
 
 use bravedave\dvc\strings;
-use controller as baseController;
+use Controller as baseController;
 use cms;
 
 class controller extends baseController {
@@ -23,7 +23,7 @@ class controller extends baseController {
      'searchFocus' => true,
      'title' => $this->title = 'CK Demo',
     ];
-    
+
     $this->renderBS5([
      'main' => fn () => $this->load('ck-demo')
     ]);

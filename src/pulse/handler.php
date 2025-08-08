@@ -37,7 +37,9 @@ final class handler {
   public static function pulseGetMatrix(ServerRequest $request): json {
 
     $action = $request('action');
-    return json::ack($action, (new dao\pulse)->getMatrix());
+    $from = $request('from', '');
+    $to = $request('to', '');
+    return json::ack($action, (new dao\pulse)->getMatrix($from, $to));
   }
 
   public static function pulseSave(ServerRequest $request): json {

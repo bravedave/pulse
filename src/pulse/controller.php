@@ -6,13 +6,15 @@
 
 namespace bravedave\pulse;
 
-use bravedave\dvc\{ controller as dvcController, ServerRequest};
+use bravedave\dvc\{controller as dvcController, ServerRequest};
 
 class controller extends dvcController {
 
   protected function _index() {
 
     $this->data = (object)[
+      'from' => date('Y-m-d', strtotime('-3 month')),
+      'to' => date('Y-m-d'),
       'title' => $this->title = config::label,
     ];
 

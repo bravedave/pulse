@@ -1,42 +1,51 @@
 <?php
-  // file: src/app/pulse/views/matrix.php
-  // MIT License
+// file: src/app/pulse/views/matrix.php
+// MIT License
 
 namespace bravedave\pulse;
 
 use bravedave\dvc\strings; ?>
 
-<div class="row gx-2 mb-2 d-print-none">
-  <div class="col">
-    <div class="input-group">
-      <input type="search" accesskey="/" class="form-control" id="<?= $_search = strings::rand() ?>" autofocus>
+<form class="col-auto d-flex align-items-center" id="<?= $_form = strings::rand() ?>">
+
+  <div class="row g-2 mb-2 d-print-none">
+
+    <div class="col-lg">
+      <div class="input-group">
+        <input type="search" accesskey="/" class="form-control"
+          id="<?= $_search = strings::rand() ?>" autofocus>
+      </div>
+    </div>
+
+    <div class="col col-lg-auto">
+
+      <div class="input-group">
+
+        <input type="date" class="form-control" id="<?= $_dateFrom = strings::rand() ?>"
+          value="<?= $from ?>" placeholder="From">
+        <div class="input-group-text">-</div>
+        <input type="date" class="form-control" id="<?= $_dateTo = strings::rand() ?>"
+          value="<?= $to ?>" placeholder="To">
+        <button type="submit" class="btn btn-outline-secondary">
+          <i class="bi bi-arrow-clockwise"></i>
+        </button>
+      </div>
+    </div>
+
+    <div class="col-auto">
+      <button class="btn btn-outline-primary" id="<?= $_uidAdd = strings::rand() ?>">
+        <i class="bi bi-plus-circle"></i> new
+      </button>
     </div>
   </div>
+</form>
 
-  <div class="col-auto">
-    <button class="btn btn-outline-primary" id="<?= $_uidAdd = strings::rand() ?>">
-      <i class="bi bi-plus-circle"></i> new
-    </button>
-  </div>
-</div>
-
-<div class="table-responsive">
-  <table class="table table-sm" id="<?= $_table = strings::rand() ?>">
-    <thead class="small">
-      <tr>
-        <td>title</td>
-        <td>content</td>
-        <td>created_by</td>
-      </tr>
-    </thead>
-
-    <tbody></tbody>
-  </table>
-</div>
+<div id="<?= $_blog = strings::rand() ?>"></div>
 <script>
   (_ => {
-    const table = $('#<?= $_table ?>');
+    const blog = $('#<?= $_blog ?>');
     const search = $('#<?= $_search ?>');
+    const form = $('#<?= $_form ?>');
 
     const contextmenu = function(e) {
 
@@ -64,20 +73,53 @@ use bravedave\dvc\strings; ?>
 
     const getMatrix = () => new Promise((resolve, reject) => {
 
+      const from = $('#<?= $_dateFrom ?>').val();
+      const to = $('#<?= $_dateTo ?>').val();
+
       _.fetch.post(_.url('<?= $this->route ?>'), {
-        action: 'get-matrix'
-      }).then(d => 'ack' == d.response ? resolve(d.data) : _.growl(d));
+        action: 'get-matrix',
+        from: from,
+        to: to
+      }).then(d => ('ack' == d.response) ? matrix(d.data) : _.growl(d));
     });
 
     const matrix = data => {
 
-      const tbody = table.find('> tbody').empty();
+      blog.empty();
+
       $.each(data, (i, dto) => {
-        $(`<tr class="pointer" data-id="${dto.id}">
-            <td class="js-title">${dto.title}</td>
-            <td class="js-content">${dto.content}</td>
-            <td class="js-created_by">${dto.created_by}</td>
-          </tr>`)
+
+        const formatDate = dateStr => {
+          const date = _.dayjs(dateStr);
+          const today = _.dayjs();
+
+          if (
+            date.isSame(today, 'day')
+          ) {
+            return date.format('HH:mm');
+          }
+
+          // console.log(date, today);
+          return date.format('L');
+        };
+
+        dto._createdDisplay = formatDate(dto.created);
+        dto._updatedDisplay = formatDate(dto.updated);
+
+
+        $(`<article class="card mb-4 pointer" data-id="${dto.id}">
+            <div class="card-header">
+              <h5 class="card-title mb-0">${dto.title}</h5>
+            </div>
+            <div class="card-body">
+              <div class="card-text">${dto.content}</div>
+            </div>
+            <div class="card-footer text-muted d-flex justify-content-end">
+              <em class="js-updated">created : ${formatDate(dto.created)} </em>
+              /
+              <em class="js-updated"> updated : ${formatDate(dto.updated)}</em>
+            </div>
+          </article>`)
           .on('click', function(e) {
 
             e.stopPropagation();
@@ -87,7 +129,7 @@ use bravedave\dvc\strings; ?>
           .on('delete', rowDelete)
           .on('edit', edit)
           .on('refresh', rowRefresh)
-          .appendTo(tbody);
+          .appendTo(blog);
       });
     };
 
@@ -102,13 +144,7 @@ use bravedave\dvc\strings; ?>
           action: 'pulse-delete',
           id: this.dataset.id
         })
-        .then(d => {
-          if ('ack' == d.response) {
-            this.remove();
-          } else {
-            _.growl(d);
-          }
-        });
+        .then(d => ('ack' == d.response) ? this.remove() : _.growl(d));
     };
 
     const rowRefresh = function(e) {
@@ -123,9 +159,9 @@ use bravedave\dvc\strings; ?>
 
         if ('ack' == d.response) {
 
-          row.find('.js-title').html(d.data.title);
-          row.find('.js-content').html(d.data.content);
-          row.find('.js-created_by').html(d.data.created_by);
+          row.find('.card-header').html(d.data.title);
+          row.find('.card-body').html(d.data.content);
+          row.find('.js-updated').html(d.data.updated);
         } else {
 
           _.growl(d);
@@ -133,8 +169,31 @@ use bravedave\dvc\strings; ?>
       });
     };
 
-    // return true from the prefilter to show the row
-    _.table.search(search, table, /* prefilter tr => true */ );
+    form.on('submit', e => {
+
+      e.preventDefault();
+      getMatrix()
+        .then(matrix)
+        .catch(_.growl);
+    });
+
+    search.on('input', function() {
+      const val = this.value.trim();
+      if (!val) {
+        blog.children('article').removeClass('d-none');
+        return;
+      }
+      const re = new RegExp(val, 'i');
+      blog.children('article').each(function() {
+        const $a = $(this);
+        const text = $a.text();
+        if (re.test(text)) {
+          $a.removeClass('d-none');
+        } else {
+          $a.addClass('d-none');
+        }
+      });
+    });
 
     $('#<?= $_uidAdd ?>').on('click', function(e) {
 
