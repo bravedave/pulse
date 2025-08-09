@@ -10,7 +10,9 @@
 
 namespace bravedave\pulse\dao\dto;
 
-class pulse_state {
+use bravedave\dvc\dto;
+
+class pulse_state extends dto {
   public $id = 0;
   public string $created = '';
   public string $updated = '';

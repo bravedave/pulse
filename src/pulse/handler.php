@@ -67,7 +67,7 @@ final class handler {
     $action = $request('action');
     if ($id = (int)$request('id')) {
 
-      (new dao\pulse)->seen($id, (bool)$request('seen'));
+      (new dao\pulse)->seen($id, (int)$request('seen'));
       return json::ack($action);
     }
 
