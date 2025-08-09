@@ -3,7 +3,7 @@
  * David Bray
  * BrayWorth Pty Ltd
  * e. david@brayworth.com.au
- * 
+ *
  * MIT License
  *
 */
@@ -40,7 +40,7 @@ use bravedave\dvc\strings;
     Underline,
     BlockQuote,
     Base64UploadAdapter,
-    CloudServices,
+    // CloudServices,
     Essentials,
     Heading,
     Image,
@@ -91,7 +91,7 @@ use bravedave\dvc\strings;
             Autoformat,
             BlockQuote,
             Bold,
-            CloudServices,
+            // CloudServices,
             Essentials,
             Heading,
             Image,

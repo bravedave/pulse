@@ -1,6 +1,12 @@
 <?php
-  // file: src/app/pulse/dao/dbinfo.php
-  // MIT License
+/*
+ * David Bray
+ * BrayWorth Pty Ltd
+ * e. david@brayworth.com.au
+ *
+ * MIT License
+ *
+*/
 
 namespace bravedave\pulse\dao;
 

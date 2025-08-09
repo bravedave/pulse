@@ -8,7 +8,7 @@ use config as rootConfig;
 
 class config extends rootConfig {
 
-  const pulse_db_version = 1;
+  const pulse_db_version = 2;
 
   const label = 'Pulse';
 

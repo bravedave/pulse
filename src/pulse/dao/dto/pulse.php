@@ -1,6 +1,12 @@
 <?php
-  // file: src/app/pulse/dao/dto/pulse.php
-  // MIT License
+/*
+ * David Bray
+ * BrayWorth Pty Ltd
+ * e. david@brayworth.com.au
+ *
+ * MIT License
+ *
+*/
 
 namespace bravedave\pulse\dao\dto;
 
@@ -13,4 +19,7 @@ class pulse extends dto {
   public $title = '';
   public $content = '';
   public $created_by = 0;
+
+  // richData
+  public pulse_state|null $state = null;
 }

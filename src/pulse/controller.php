@@ -56,6 +56,7 @@ class controller extends dvcController {
       'get-by-id' => handler::pulseGetByID($request),
       'get-matrix' => handler::pulseGetMatrix($request),
       'pulse-save' => handler::pulseSave($request),
+      'pulse-seen' => handler::pulseSeen($request),
       default => parent::postHandler()
     };
   }

@@ -61,4 +61,16 @@ final class handler {
 
     return json::ack($action);
   }
+
+  public static function pulseSeen(ServerRequest $request): json {
+
+    $action = $request('action');
+    if ($id = (int)$request('id')) {
+
+      (new dao\pulse)->seen($id, (bool)$request('seen'));
+      return json::ack($action);
+    }
+
+    return json::nak($action);
+  }
 }
