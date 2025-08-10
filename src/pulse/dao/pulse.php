@@ -77,15 +77,12 @@ class pulse extends dao {
           (new pulse_state)->UpdateByID([
             'seen' => $seen ? 1 : 0
           ], $state->id);
-
-          logger::info(sprintf('<updated %s> %s', $seen, logger::caller()));
         } else {
 
           (new pulse_state)->Insert([
             'pulse_id' => $id,
             'seen' => $seen ? 1 : 0
           ]);
-          logger::info(sprintf('<inserted %s:%s> %s', $id, $seen, logger::caller()));
         }
       }
     }

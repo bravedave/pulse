@@ -6,22 +6,9 @@ namespace bravedave\pulse;
 
 use bravedave\dvc\strings; ?>
 
-<div id="<?= $_container = strings::rand() ?>">
+<div style="max-width: <?= config::pulse_width ?>px;" class="mx-auto" id="<?= $_container = strings::rand() ?>">
 
-  <style>
-    #<?= $_container ?> {
-
-      .image img {
-        display: block;
-        height: auto;
-        margin: 0 auto;
-        max-width: 100%;
-        min-width: 100%;
-      }
-    }
-  </style>
-
-  <form class="col-auto d-flex align-items-center" id="<?= $_form = strings::rand() ?>">
+  <form id="<?= $_form = strings::rand() ?>">
 
     <div class="row g-2 mb-2 d-print-none">
 
@@ -133,10 +120,10 @@ use bravedave\dvc\strings; ?>
                 </div>
                 <h5 class="card-title mb-0">${dto.title}</h5>
               </div>
-              <div class="card-body">
+              <div class="card-body overflow-x-auto">
                 <div class="card-text">${dto.content}</div>
               </div>
-              <div class="card-footer text-muted d-flex justify-content-end">
+              <div class="card-footer text-muted d-flex justify-content-end small">
                 <em class="js-updated">created : ${formatDate(dto.created)} </em>
                 /
                 <em class="js-updated"> updated : ${formatDate(dto.updated)}</em>

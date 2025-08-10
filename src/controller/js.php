@@ -7,13 +7,5 @@
  * MIT License
  *
 */
-use bravedave\dvc\ckeditor;
 
-class js extends Controller {
-
-  public function ckeditor($file = '', $translation = '') {
-
-    if (ckeditor::serve($file, $translation))  return;
-    $this->page404();
-  }
-}
+class js extends js\controller {}
