@@ -133,7 +133,7 @@ use function bravedave\dvc\esc;
         form.find('input:not([type="hidden"]), select, textarea').first().focus();
       });
 
-      import('/js/ckeditor')
+      import('/<?= $this->route ?>/ckeditor')
         .then(({
           getCKEditor,
           enforceImageWidth,
@@ -153,7 +153,9 @@ use function bravedave\dvc\esc;
 
                 editor = editorInstance;
                 exportInline = exportAllComputedStylesInline
-                editor.model.document.on('change:data', () => enforceImageWidth(editor));
+                editor.model.document.on('change:data', () => enforceImageWidth(editor, {
+                  width: <?= config::pulse_width ?>
+                }));
               })
               .catch(error => console.error(error.stack));
           });

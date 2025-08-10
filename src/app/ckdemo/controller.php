@@ -30,7 +30,7 @@ class controller extends baseController {
   }
 
   protected function before() {
-    parent::before();
     $this->viewPath[] = __DIR__ . '/views/';
+    parent::before();
   }
 }

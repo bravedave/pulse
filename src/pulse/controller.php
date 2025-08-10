@@ -6,7 +6,7 @@
 
 namespace bravedave\pulse;
 
-use bravedave\dvc\{controller as dvcController, ServerRequest};
+use bravedave\dvc\{controller as dvcController, Response, ServerRequest};
 
 class controller extends dvcController {
 
@@ -59,6 +59,11 @@ class controller extends dvcController {
       'pulse-seen' => handler::pulseSeen($request),
       default => parent::postHandler()
     };
+  }
+
+  public function ckeditor() {
+
+    Response::serve(__DIR__ . '/scripts/ckeditor.js');
   }
 
   public function edit($id = 0) {
